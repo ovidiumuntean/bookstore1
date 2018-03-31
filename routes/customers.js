@@ -4,7 +4,7 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const Customer = require('../models/customer');
 const bcrypt = require('bcryptjs');
-const config = require('../config/db');
+const config = require('../config/database');
 
 
 // Register
@@ -24,7 +24,9 @@ router.post('/register', function(req, res, next) {
                         res.json({success: true, msg: 'User registered'});
                         next();
                     }
-                }).catch (next);
+                }).catch(error => {
+                    res.json({success: false, msg: 'Email already in use!'})
+            });
         });
     });
 });

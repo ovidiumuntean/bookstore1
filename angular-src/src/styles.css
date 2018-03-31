@@ -1,1 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
+@import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+.no-border-radius-right {
+  border-radius: 10px     0      0   10px;
+}
+.no-border-radius-left {
+  border-radius: 0     10px      10px   0;
+}
+.marginLeft20 {
+  margin-left: 20%;
+  margin-right: 20%;
+}

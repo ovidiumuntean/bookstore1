@@ -37,6 +37,7 @@ const Book = sequilizeDb.define('book', {
     qty_in_stock: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        defaultValue: 0,
         validate: {
             notEmpty: true,
             isInt: true

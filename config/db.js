@@ -23,21 +23,23 @@ module.exports = connection;
 // // We'll define associations after we import them here
 const Administrator = require('../models/administrator');
 const Customer = require('../models/customer');
-// const Company = require('../models/company');
+const Book = require('../models/book');
 const Address = require('../models/address');
-// const Job = require('../models/job');
-// const JobApplications = require('../models/jobApplication');
+const LineItem = require('../models/line_item');
+const Order = require('../models/order');
+const Rating = require('../models/rating');
 //
 //
 //
 //
 // // One to many, comapany has more employees
-// Employee.belongsTo(Company);
-// Job.belongsTo(Company);
+Customer.hasMany(Order, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+Customer.hasMany(Address, { foreignKey: { allowNull: false }, onDelete: 'CASCADE'});
+Address.hasMany(Order);
+
 //
 // // one to one relationship, will give a foreign key in temp_employees of address
 // Address.hasOne(Temp_Employee);
-Address.hasOne(Customer);
 // Address.hasOne(Company);
 //
 // // Many to many relationship, between company and temp_employees
@@ -45,5 +47,8 @@ Address.hasOne(Customer);
 // Company.belongsToMany(Temp_Employee, {through: 'Comp_Temp_Employees'});
 //
 // // Many to many relationship, between job and temp_employees
-// Temp_Employee.belongsToMany(Job, {through: JobApplications});
-// Job.belongsToMany(Temp_Employee, {through: JobApplications});
+Book.belongsToMany(Customer, {through: Rating});
+Customer.belongsToMany(Book, {through: Rating});
+
+Book.belongsToMany(Order, {through: LineItem});
+Order.belongsToMany(Book, {through: LineItem});

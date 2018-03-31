@@ -2,6 +2,11 @@ const Sequelize = require('sequelize');
 const sequilizeDb = require('../config/db');
 
 const Order = sequilizeDb.define('order', {
+    id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
     paymentType: {
         type: Sequelize.STRING(100),
         allowNull: true,
