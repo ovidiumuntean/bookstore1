@@ -1,7 +1,26 @@
 <app-navbar></app-navbar>
-<div class="container">
-  <flash-messages></flash-messages>
-  <router-outlet></router-outlet>
-  <!--<app-datepicker></app-datepicker>-->
-</div>
+<!--<mat-drawer-container class="">-->
+  <!--<mat-drawer mode="side" class="flex-wrap" style="flex-wrap: wrap" opened="true">-->
+    <!--<app-side-bar></app-side-bar>-->
+  <!--</mat-drawer>-->
+  <!--<mat-drawer-content>-->
+    <!--<div class="container">-->
+      <!--<flash-messages></flash-messages>-->
+      <!--<router-outlet></router-outlet>-->
+      <!--&lt;!&ndash;<app-datepicker></app-datepicker>&ndash;&gt;-->
+    <!--</div>-->
+  <!--</mat-drawer-content>-->
+<!--</mat-drawer-container>-->
+<mat-sidenav-container style="height: max-content">
+  <mat-sidenav mode="side" opened="true"  class="nav-side-menu">
+    <app-side-bar></app-side-bar>
+  </mat-sidenav>
+  <mat-sidenav-content style="height: max-content">
+    <div class="container" style="height: 100%">
+    <flash-messages></flash-messages>
+    <router-outlet></router-outlet>
+    <!--<app-datepicker></app-datepicker>-->
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
 

@@ -4,7 +4,7 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const Administrator = require('../models/administrator');
 const bcrypt = require('bcryptjs');
-const config = require('../config/db');
+const config = require('../config/database');
 
 
 // Register
@@ -21,7 +21,7 @@ router.post('/register', function(req, res, next) {
                     if(!user){
                         res.json({success: false, msg: 'Error in creation!'});
                     } else {
-                        res.json({success: true, msg: 'User registered'});
+                        res.json({success: true, msg: 'Admin registered'});
                         next();
                     }
                 }).catch (next);
@@ -38,7 +38,7 @@ router.post('/authenticate', function(req, res, next) {
         where: {email: req.body.email}
     }).then(user => {
         if(!user){
-            res.json({success: false, msg: 'User not found'});
+            res.json({success: false, msg: 'Admin not found'});
         } else{
             //console.log(user);
             bcrypt.compare(req.body.password, user.password, (err, isMatch) => {
@@ -66,7 +66,7 @@ router.post('/authenticate', function(req, res, next) {
 // Profile
 router.get('/profile', passport.authenticate('jwt', {session:false}), (req, res, next) => {
     console.log('Administrator Profile!');
-    res.json({user: req.user});
+    res.json({admin: req.user});
 });
 
 module.exports = router;

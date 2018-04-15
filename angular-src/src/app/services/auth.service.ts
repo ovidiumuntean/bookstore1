@@ -12,8 +12,22 @@ import { tokenNotExpired } from 'angular2-jwt';
 export class AuthService {
   authToken: any;
   user: any;
+  admin: any;
 
   constructor(protected http: Http) { }
+
+  checkLocalStorage(){
+    try {
+      if(localStorage.getItem('user')) {
+        this.user = localStorage.getItem('user');
+      } else if (localStorage.getItem('admin')){
+        this.admin = localStorage.getItem('admin');
+      }
+      this.authToken = localStorage.getItem('id_token');
+    } catch (e) {
+      this.logout();
+    }
+  }
 
   registerUser(user) {
     const headers = new Headers();
@@ -44,6 +58,7 @@ export class AuthService {
   }
 
   loggedIn() {
+    this.checkLocalStorage();
     if (this.user) {
       console.log('Token not expired!');
       return tokenNotExpired('id_token');
@@ -55,6 +70,7 @@ export class AuthService {
   logout() {
     this.authToken = null;
     this.user = null;
+    this.admin = null;
     localStorage.clear();
   }
 
@@ -66,5 +82,64 @@ export class AuthService {
     return this.http.get('http://localhost:3000/customer/profile', {headers: headers})
       .map(res => res.json());
   }
+
+  // ********************************     Admin methods ****************************************
+  authenticateAdmin(admin) {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    return this.http.post('http://localhost:3000/admin/authenticate', admin, {headers: headers})
+      .map(res => res.json());
+  }
+
+  storeAdminData(token, admin) {
+    localStorage.setItem('id_token', token);
+    localStorage.setItem('admin', JSON.stringify(admin));
+    this.authToken = token;
+    this.admin = admin;
+  }
+
+  adminLoggedIn() {
+    if (this.admin) {
+      console.log('Token not expired!');
+      return tokenNotExpired('id_token');
+    } else {
+      return false;
+    }
+  }
+
+  // ********************************   BOOK METHODS    ********************************************
+  addBook(formData) {
+    if (this.adminLoggedIn()) {
+      const headers = new Headers();
+      this.loadToken();
+      headers.append('Authorization', this.authToken);
+      return this.http.post('http://localhost:3000/book/add', formData, {headers: headers})
+        .map(res => res.json());
+    }
+  }
+
+  getBooks(){
+    const headers = new Headers();
+    this.loadToken();
+    headers.append('Authorization', this.authToken);
+    headers.append('Content-Type', 'multipart/form-data');
+    return this.http.get('http://localhost:3000/book/get_books', {headers: headers})
+      .map(res => res.json());
+  }
+
+  deleteBook(bookId){
+    if (this.adminLoggedIn()) {
+      const headers = new Headers();
+      this.loadToken();
+      headers.append('Authorization', this.authToken);
+      const options = new RequestOptions({
+        headers: headers,
+        body: {bookId: bookId}
+      });
+      return this.http.delete('http://localhost:3000/book/delete', options)
+        .map(res => res.json());
+    }
+  }
+
 
 }

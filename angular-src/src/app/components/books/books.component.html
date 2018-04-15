@@ -1,3 +1,65 @@
-<p>
-  books works!
-</p>
+<div class="container">
+<table class="table table-sm" *ngIf="books" id="booksTable">
+  <thead>
+  <tr>
+    <th scope="col">#</th>
+    <th scope="col"  (click)="onSortTable('title')">
+      Title
+      <span *ngIf="sortType == 'title' && !sortReverse" class="fa fa-caret-down"></span>
+      <span *ngIf="sortType == 'title' && sortReverse" class="fa fa-caret-up"></span>
+    </th>
+    <th scope="col" (click)="onSortTable('author')">
+      Author
+      <span *ngIf="sortType == 'author' && !sortReverse" class="fa fa-caret-down"></span>
+      <span *ngIf="sortType == 'author' && sortReverse" class="fa fa-caret-up"></span>
+    </th>
+    <th scope="col" (click)="onSortTable('category')">
+      Category
+      <span *ngIf="sortType == 'category' && !sortReverse" class="fa fa-caret-down"></span>
+      <span *ngIf="sortType == 'category' && sortReverse" class="fa fa-caret-up"></span>
+    </th>
+    <th scope="col" (click)="onSortTable('price')">
+      Price
+      <span *ngIf="sortType == 'price' && !sortReverse" class="fa fa-caret-down"></span>
+      <span *ngIf="sortType == 'price' && sortReverse" class="fa fa-caret-up"></span>
+    </th>
+    <th scope="col" (click)="onSortTable('qty_in_stock')">
+      Stock
+      <span *ngIf="sortType == 'stock' && !sortReverse" class="fa fa-caret-down"></span>
+      <span *ngIf="sortType == 'stock' && sortReverse" class="fa fa-caret-up"></span>
+    </th>
+    <th scope="col">Image</th>
+    <th scope="col">Quantity</th>
+    <th scope="col">Add to Basket</th>
+    <th scope="col" *ngIf="authService.adminLoggedIn()">Del Book</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor=" let book of books; let i = index">
+    <th scope="row">{{i + 1}}</th>
+    <td>{{book.title}}</td>
+    <td>{{book.author}}</td>
+    <td>{{book.category}}</td>
+    <td>{{book.price | currency}}</td>
+    <td>{{book.qty_in_stock}}</td>
+    <td>
+      <div class="carousel-inner">
+        <img *ngIf="book.image" style="width:60px; height:45px" class="img-responsive" (click)="setImage($event)" [src]='sanitizer.bypassSecurityTrustResourceUrl(book.image)'>
+      </div>
+    </td>
+    <td>
+      <select class="form-control" id="exampleSelect1">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+      </select>
+    </td>
+    <td><button type="button" class="btn btn-success">Add</button></td>
+    <td *ngIf="authService.adminLoggedIn()"><button type="button" class="btn btn-danger" (click)="deleteBook(i)">Delete</button></td>
+  </tr>
+  </tbody>
+</table>
+  <p>{{sortType}}</p>
+</div>

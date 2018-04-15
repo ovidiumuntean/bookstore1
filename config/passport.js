@@ -17,7 +17,7 @@ module.exports = function(passport) {
                 return done(null, user);
             }
         });
-    } else {
+    } else if(jwt_payload.data.permission === 'admin' || jwt_payload.data.permission === 'admin_user') {
         Administrator.findOne({where: {email: jwt_payload.data.email}}).then(user => {
             if(!user){
                 return done(err, false);

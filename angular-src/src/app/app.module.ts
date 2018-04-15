@@ -4,7 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule }  from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 import {RouterModule, Routes} from '@angular/router';
-
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatButtonModule, MatCheckboxModule, MatCardModule} from '@angular/material';
+import {enableProdMode} from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -22,6 +25,14 @@ import { AuthService } from './services/auth.service';
 import { AuthGuard } from './guards/auth.guard';
 
 import { FlashMessagesModule } from 'angular2-flash-messages';
+import { AdminLoginComponent } from './components/admin-login/admin-login.component';
+import { AddBookComponent } from './components/add-book/add-book.component';
+import { EditBookComponent } from './components/edit-book/edit-book.component';
+import { CustomersComponent } from './components/customers/customers.component';
+import { BookComponent } from './components/book/book.component';
+import { SideBarComponent } from './components/side-bar/side-bar.component';
+
+enableProdMode();
 
 const appRoutes: Routes =  [
   {path:'', component: HomeComponent},
@@ -31,6 +42,8 @@ const appRoutes: Routes =  [
   {path:'books', component: BooksComponent, canActivate:[AuthGuard]},
   {path:'order', component: OrdersComponent, canActivate:[AuthGuard]},
   {path:'basket', component: BasketComponent, canActivate:[AuthGuard]},
+  {path:'admin/login', component: AdminLoginComponent},
+  {path:'admin/add-book', component: AddBookComponent, canActivate:[AuthGuard]}
 
   // {path:'company/profile', component: CompanyProfileComponent, canActivate:[AuthGuard]},
   // {path:'company/createJob', component: CreateJobComponent, canActivate:[AuthGuard]},
@@ -50,7 +63,13 @@ const appRoutes: Routes =  [
     ProfileComponent,
     BooksComponent,
     BasketComponent,
-    OrdersComponent
+    OrdersComponent,
+    AdminLoginComponent,
+    AddBookComponent,
+    EditBookComponent,
+    CustomersComponent,
+    BookComponent,
+    SideBarComponent
   ],
   imports: [
     BrowserModule,
@@ -59,6 +78,11 @@ const appRoutes: Routes =  [
     HttpModule,
     RouterModule.forRoot(appRoutes),
     FlashMessagesModule,
+    MatSidenavModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    BrowserAnimationsModule,
+    MatCardModule
   ],
   providers: [ValidateService, AuthService, AuthGuard],
   bootstrap: [AppComponent]

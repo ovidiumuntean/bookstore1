@@ -27,4 +27,23 @@ export class ValidateService {
     }
   }
 
+  // check if an object is empty ( true = empty, and false = not empty)
+   isEmpty(obj) {
+    for ( var key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        return false;
+      }
+    }
+    return true;
+  }// end isEmpty
+
+  validateObj(obj){
+    for ( var key in obj) {
+      if(obj[key] === undefined){
+        return false;
+      }
+    }
+    return true;
+  }
+
 }

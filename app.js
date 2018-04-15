@@ -4,6 +4,16 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const passport = require('passport');
 const db = require('./config/db');
+var multer  = require('multer');
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './uploads/')
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now())
+    }
+});
+var upload = multer({ storage: storage });
 
 
 const app = express();
@@ -24,12 +34,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Body Parser Middleware
 app.use(bodyParser.json());
+app.use(upload.any());
 
 // Passport Middleware
 app.use(passport.initialize());
 
+require('./config/passport')(passport);
+
 app.use('/customer', customers);
-app.use('/administrator', administrators);
+app.use('/admin', administrators);
 app.use('/book', books);
 
 

@@ -6,16 +6,14 @@ const Book = sequilizeDb.define('book', {
         type: Sequelize.STRING(200),
         allowNull: false,
         validate: {
-            notEmpty: true,
-            is: ["^[a-z]+$",'i']
+            notEmpty: true
         }
     },
     author: {
         type: Sequelize.STRING(200),
         allowNull: false,
         validate: {
-            notEmpty: true,
-            is: ["^[a-z]+$",'i']
+            notEmpty: true
         }
     },
     category: {

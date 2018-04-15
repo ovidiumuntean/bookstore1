@@ -1,9 +1,11 @@
 <div class="jumbotron text-center">
-  <h1>Easy Workers App</h1>
-  <p class="lead">Welcome to our Easy Workers application! </p>
+  <h1>Book Store App</h1>
+  <p class="lead">Welcome to our Book Store application! </p>
   <div>
-    <a class="btn btn-primary" [routerLink]="['/register']">Register</a>
-    <a class="btn btn-dark" [routerLink]="['/login']">Login</a>
+    <a *ngIf="!authService.adminLoggedIn() && !authService.loggedIn()" class="btn btn-primary" [routerLink]="['/register']">Register</a>
+    <a *ngIf="!authService.adminLoggedIn() && !authService.loggedIn()" class="btn btn-dark" [routerLink]="['/login']">Login</a>
+    <a *ngIf="authService.adminLoggedIn()" class="btn btn-primary" [routerLink]="['/admin/add-book']">Add Book</a>
+    <a *ngIf="authService.adminLoggedIn() || authService.loggedIn()" class="btn btn-dark" [routerLink]="['/books']">View Books</a>
   </div>
 </div>
 
