@@ -1,0 +1,39 @@
+<div class="jumbotron">
+  <div class="marginLeft20">
+    <h2 class="page-header">Add Book</h2>
+    <div class="box-form"></div>
+    <form (submit)="onAddBookSubmit()" layout="horizontal" class="col-sm-3" class="col-sm-8">
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" [(ngModel)]="title" name="title" class="form-control" id="title" placeholder="Enter Book Title">
+      </div>
+      <div class="form-group">
+        <label for="author">Author</label>
+        <input type="text" [(ngModel)]="author" name="author" class="form-control" id="author" placeholder="Enter Author Name">
+      </div>
+      <div class="form-group">
+        <label for="category">Category</label>
+        <input type="text" [(ngModel)]="category" name="category" class="form-control" id="category" placeholder="Enter Category">
+      </div>
+      <div class="form-group">
+        <label for="price">Price</label>
+        <input type="number" [(ngModel)]="price" name="price" class="form-control" id="price" placeholder="Enter Price">
+      </div>
+      <div class="form-group">
+        <label for="qty_in_stock">Quantity</label>
+        <input type="number" [(ngModel)]="qty_in_stock" name="qty_in_stock" class="form-control" id="qty_in_stock" placeholder="Enter Quantity in Stock">
+      </div>
+      <div class="form-group">
+        <label for="image_title">Image Title</label>
+        <input type="text" (change)="onImageTitle()" [(ngModel)]="image_title" name="image_title" class="form-control" id="image_title" placeholder="Enter Image Title">
+      </div>
+      <div class="form-group">
+        <input type="file"  (change)="onFileSelected($event)" name="image" class="form-control" id="image" #image>
+        <!--<button type="button" class="btn btn-success" (click)="image.click()">Select File</button>-->
+      </div>
+
+      <input type="submit" class="btn btn-primary" value="Submit">
+
+    </form>
+  </div>
+</div>
