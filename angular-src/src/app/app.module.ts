@@ -8,6 +8,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatButtonModule, MatCheckboxModule, MatCardModule} from '@angular/material';
 import {enableProdMode} from '@angular/core';
+import {CommonModule, CurrencyPipe} from '@angular/common';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -23,6 +24,7 @@ import { OrdersComponent } from './components/orders/orders.component';
 import { ValidateService } from './services/validate.service';
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from './guards/auth.guard';
+import { BasketService } from './services/basket.service';
 
 import { FlashMessagesModule } from 'angular2-flash-messages';
 import { AdminLoginComponent } from './components/admin-login/admin-login.component';
@@ -43,7 +45,8 @@ const appRoutes: Routes =  [
   {path:'order', component: OrdersComponent, canActivate:[AuthGuard]},
   {path:'basket', component: BasketComponent, canActivate:[AuthGuard]},
   {path:'admin/login', component: AdminLoginComponent},
-  {path:'admin/add-book', component: AddBookComponent, canActivate:[AuthGuard]}
+  {path:'admin/add-book', component: AddBookComponent, canActivate:[AuthGuard]},
+  {path: 'book', component: BookComponent, canActivate: [AuthGuard]}
 
   // {path:'company/profile', component: CompanyProfileComponent, canActivate:[AuthGuard]},
   // {path:'company/createJob', component: CreateJobComponent, canActivate:[AuthGuard]},
@@ -82,9 +85,10 @@ const appRoutes: Routes =  [
     MatButtonModule,
     MatCheckboxModule,
     BrowserAnimationsModule,
-    MatCardModule
+    MatCardModule,
+    CommonModule
   ],
-  providers: [ValidateService, AuthService, AuthGuard],
+  providers: [ValidateService, AuthService, AuthGuard, BasketService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

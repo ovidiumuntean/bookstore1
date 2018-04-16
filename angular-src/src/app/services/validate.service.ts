@@ -3,7 +3,63 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class ValidateService {
 
+  public basket: any=this.createBasket();
   constructor() { }
+
+  createBasket(){
+    var basketModule = (function () {
+
+      // privates
+
+      var basket = [];
+
+      function addItem(book) {
+        basket.push(book);
+      }
+
+      function removeItem(book) {
+        var indexOfBook = basket.indexOf(book);
+        basket.splice(indexOfBook, 1);
+      }
+
+      function getItemCount() {
+        return basket.length;
+      }
+
+      function getTotalPrice() {
+        var q = this.getItemCount(),
+          p = 0;
+
+        while (q--) {
+          p += basket[q].price;
+        }
+
+        return p;
+      }
+
+      // Return an object exposed to the public
+      return {
+
+        // Add items to our basket
+        addItem: addItem,
+
+        //Remove an item from the basket
+        removeItem: removeItem,
+
+        // Get the count of items in the basket
+        getItemCount: getItemCount,
+
+        // Get the total value of items in the basket
+        getTotalPrice: getTotalPrice
+      };
+    })();
+
+    return basketModule;
+  }
+
+  getBasket(){
+    return this.basket;
+  }
 
   validateRegister(user) {
     console.log(user);

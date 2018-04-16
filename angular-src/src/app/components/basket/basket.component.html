@@ -1,3 +1,91 @@
-<p>
-  basket works!
-</p>
+<div class="container">
+
+  <div *ngIf="books.length == 0" class="alert alert-dismissible alert-info">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <h4 class="alert-heading">Empty Basket!</h4>
+    <p class="mb-0">Click on the following link to go to book Store,
+      <a [routerLink]="['/books']" class="alert-link">Book Store Link</a>.
+    </p>
+  </div>
+  <table class="table table-sm" *ngIf="books.length > 0" id="booksTable">
+    <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col"  (click)="onSortTable('title')">
+        Title
+        <span *ngIf="sortType == 'title' && !sortReverse" class="fa fa-caret-down"></span>
+        <span *ngIf="sortType == 'title' && sortReverse" class="fa fa-caret-up"></span>
+      </th>
+      <th scope="col" (click)="onSortTable('author')">
+        Author
+        <span *ngIf="sortType == 'author' && !sortReverse" class="fa fa-caret-down"></span>
+        <span *ngIf="sortType == 'author' && sortReverse" class="fa fa-caret-up"></span>
+      </th>
+      <th scope="col" (click)="onSortTable('category')">
+        Category
+        <span *ngIf="sortType == 'category' && !sortReverse" class="fa fa-caret-down"></span>
+        <span *ngIf="sortType == 'category' && sortReverse" class="fa fa-caret-up"></span>
+      </th>
+      <th scope="col" (click)="onSortTable('price')">
+        Price
+        <span *ngIf="sortType == 'price' && !sortReverse" class="fa fa-caret-down"></span>
+        <span *ngIf="sortType == 'price' && sortReverse" class="fa fa-caret-up"></span>
+      </th>
+      <th scope="col" (click)="onSortTable('qty_in_stock')">
+        Stock
+        <span *ngIf="sortType == 'stock' && !sortReverse" class="fa fa-caret-down"></span>
+        <span *ngIf="sortType == 'stock' && sortReverse" class="fa fa-caret-up"></span>
+      </th>
+      <th scope="col">Image</th>
+      <th scope="col">Quantity</th>
+      <th scope="col" *ngIf="authService.adminLoggedIn()">Del Book</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor=" let book of books; let i = index">
+      <th scope="row">{{i + 1}}</th>
+      <td>{{book.title}}</td>
+      <td>{{book.author}}</td>
+      <td>{{book.category}}</td>
+      <td>{{book.price | currency:'EUR':'symbol'}}</td>
+      <td>{{book.qty_in_stock}}</td>
+      <td>
+        <div class="carousel-inner">
+          <img *ngIf="book.image" style="width:60px; height:45px" class="img-responsive" (click)="setImage($event)" [src]='sanitizer.bypassSecurityTrustResourceUrl(book.image)'>
+        </div>
+      </td>
+      <td>
+        <select name="quantity" id="quantity" class="form-control" value="{{book.quantity}}">
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+          <option>6</option>
+          <option>7</option>
+          <option>8</option>
+          <option>9</option>
+          <option>10</option>
+        </select>
+      </td>
+      <td *ngIf="authService.adminLoggedIn() || authService.loggedIn()"><button type="button" class="btn btn-danger" (click)="onDeleteBook(i)">Delete</button></td>
+    </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td>Total Cost</td>
+        <th>$ {{totalCost}}</th>
+      </tr>
+    </tfoot>
+  </table>
+  <div class="row col-md-12 form-group" *ngIf="books.length > 0">
+    <label for="payment" class="col-sm-3 col-md-2 col-form-label">Payment Type</label>
+    <select [(ngModel)]="payment" name="payment" id="payment" class="form-control col-md-2 float-left">
+      <option value="visa">Visa Payment</option>
+      <option value="debit">Debit Card</option>
+    </select>
+    <div class="float-right" align="right">
+      <button *ngIf="books.length > 0 && (authService.adminLoggedIn() || authService.loggedIn())" type="button" class="btn btn-success float-right" (click)="onPlaceOrder()">Place Order</button>
+    </div>
+    </div>
+  </div>

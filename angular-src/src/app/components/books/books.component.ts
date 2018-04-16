@@ -1,8 +1,11 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, EventEmitter, Output, Input } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import {DomSanitizer} from '@angular/platform-browser';
-
+import { ValidateService } from '../../services/validate.service';
+import { BasketService } from '../../services/basket.service';
+import { Router, NavigationExtras } from '@angular/router';
+ // import {basketModule} from '../../models/basket.js';
 
 @Component({
   selector: 'app-books',
@@ -12,15 +15,20 @@ import {DomSanitizer} from '@angular/platform-browser';
 export class BooksComponent implements OnInit {
   books: any;
   book: Object;
-  j: any;
   sortType: String;
   sortReverse: Boolean=true;
+  category: string;
+  searchValue: String;
+  quantity: string;
 
   constructor(
     private authService: AuthService,
     private flashMessage: FlashMessagesService,
     private cdr: ChangeDetectorRef,
-    public sanitizer: DomSanitizer
+    public sanitizer: DomSanitizer,
+    private router: Router,
+    private validateService: ValidateService,
+    public basketService: BasketService
   ) { }
 
   ngOnInit(){
@@ -28,7 +36,6 @@ export class BooksComponent implements OnInit {
   }
 
   onChange(): void {
-
     this.cdr.detectChanges();
   }
 
@@ -57,11 +64,13 @@ export class BooksComponent implements OnInit {
 
   getBooks(){
     this.authService.getBooks().subscribe(data => {
-        if(data){
+        if(data.success){
           this.books = data.books;
           for(var i=0; i < this.books.length; i++){
             this.setImgUrl(this.books[i]);
           }
+        } else {
+          this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 3000});
         }
       },
       err => {
@@ -121,7 +130,7 @@ export class BooksComponent implements OnInit {
           this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 3000});
 
         }
-      })
+      });
     }
   }
 
@@ -135,5 +144,59 @@ export class BooksComponent implements OnInit {
     return window.btoa( binary );
   }
 
+  onSearch(){
+    var cat = "";
+    var newObject = new Object();
+
+    var defineProp = function ( obj, key, value ){
+      var config = {
+        value: value,
+        writable: true,
+        enumerable: true,
+        configurable: true
+      };
+      Object.defineProperty( obj, key, config );
+    };
+    var search = Object.create(Object.prototype);
+    defineProp(search, this.category, this.category);
+    defineProp(search, 'searchValue', this.searchValue);
+    console.log(search);
+
+    if(this.validateService.validateObj(search) || this.validateService.isEmpty(search)) {
+      this.authService.searchBook(search).subscribe(data => {
+        if (data.success) {
+          this.books = data.books;
+          for (var i = 0; i < this.books.length; i++) {
+            this.setImgUrl(this.books[i]);
+          }
+        } else {
+          this.getBooks();
+          this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 3000});
+        }
+      });
+    } else {
+      this.flashMessage.show("Please provide values for search operation!", {cssClass: 'alert-danger', timeout: 3000});
+    }
+  }
+
+  addToBasket(i){
+    var basketModule = this.basketService.getBasket();
+    var message = basketModule.addItem(this.books[i], parseInt(this.quantity));
+    if(message.success){
+      this.flashMessage.show(message.msg, {cssClass: 'alert-success', timeout: 3000});
+    } else {
+      this.flashMessage.show(message.msg, {cssClass: 'alert-danger', timeout: 3000});
+    }
+    console.log(basketModule.getTotalPrice());
+  }
+
+  onViewBook(i){
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+        "bookId": this.books[i].id.toString()
+      }
+    };
+    this.router.navigate(['/book'], navigationExtras);
+  }
 
 }

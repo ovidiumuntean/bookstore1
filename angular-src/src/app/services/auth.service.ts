@@ -141,5 +141,48 @@ export class AuthService {
     }
   }
 
+  getBookById(bookId){
+    const headers = new Headers();
+    this.loadToken();
+    headers.append('Authorization', this.authToken);
+    const options = new RequestOptions({
+      headers: headers,
+      params: {bookId: bookId}
+    });
+    return this.http.get('http://localhost:3000/book/bookById', options)
+      .map(res => res.json());
+  }
 
+  searchBook(searchValues){
+    const headers = new Headers();
+    this.loadToken();
+    headers.append('Authorization', this.authToken);
+    const options = new RequestOptions({
+      headers: headers,
+      params: searchValues
+    });
+    return this.http.get('http://localhost:3000/book/search', options)
+      .map(res => res.json());
+  }
+
+  placeOrder(lineItems){
+    if (this.adminLoggedIn()) {
+      const headers = new Headers();
+      this.loadToken();
+      headers.append('Content-Type', 'application/json');
+      headers.append('Authorization', this.authToken);
+      return this.http.post('http://localhost:3000/book/placeOrder', lineItems, {headers: headers})
+        .map(res => res.json());
+    }
+  }
+
+  updateStock(book){
+    if (this.adminLoggedIn()) {
+      const headers = new Headers();
+      this.loadToken();
+      headers.append('Authorization', this.authToken);
+      return this.http.post('http://localhost:3000/book/updateStock', book, {headers: headers})
+        .map(res => res.json());
+    }
+  }
 }

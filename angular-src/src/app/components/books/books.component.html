@@ -1,4 +1,25 @@
 <div class="container">
+  <div class="mdi-page-layout-header">
+    <div class="row align-content-center margin10" align="center">
+      <div class="col-sm-10 col-md-10 align-content-center" align="center" *ngIf="authService.loggedIn() || authService.adminLoggedIn()">
+      <form (submit)="onSearch()" class="form-group" role="search">
+        <div class="input-group">
+          <select [(ngModel)]="category" class="btn btn-secondary no-border-radius-right" name="category" id="category">
+            <option value="category">By Category</option>
+            <option value="title">By Title</option>
+            <option value="author">By Author</option>
+          </select>
+          <!--<button class="btn btn-secondary my-2 my-sm-0 no-border-radius-right" type="submit">All</button>-->
+          <input type="text" [(ngModel)]="searchValue" class="form-control" placeholder="Search Books..." name="srch-term" id="srch-term">
+          <div class="input-group-btn">
+            <button class="btn btn-default btn-warning no-border-radius-left" type="submit" value="Submit"><i class="material-icons mdi-10px md-black">search</i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  </div>
+
 <table class="table table-sm" *ngIf="books" id="booksTable">
   <thead>
   <tr>
@@ -32,6 +53,7 @@
     <th scope="col">Quantity</th>
     <th scope="col">Add to Basket</th>
     <th scope="col" *ngIf="authService.adminLoggedIn()">Del Book</th>
+    <th scope="col">View</th>
   </tr>
   </thead>
   <tbody>
@@ -40,7 +62,7 @@
     <td>{{book.title}}</td>
     <td>{{book.author}}</td>
     <td>{{book.category}}</td>
-    <td>{{book.price | currency}}</td>
+    <td>{{book.price | currency:'EUR':'symbol':'.2'}}</td>
     <td>{{book.qty_in_stock}}</td>
     <td>
       <div class="carousel-inner">
@@ -48,16 +70,22 @@
       </div>
     </td>
     <td>
-      <select class="form-control" id="exampleSelect1">
+      <select [(ngModel)]="quantity" name="quantity" id="quantity" class="form-control">
         <option>1</option>
         <option>2</option>
         <option>3</option>
         <option>4</option>
         <option>5</option>
+        <option>6</option>
+        <option>7</option>
+        <option>8</option>
+        <option>9</option>
+        <option>10</option>
       </select>
     </td>
-    <td><button type="button" class="btn btn-success">Add</button></td>
+    <td><button type="button" class="btn btn-success" (click)="addToBasket(i)">Add</button></td>
     <td *ngIf="authService.adminLoggedIn()"><button type="button" class="btn btn-danger" (click)="deleteBook(i)">Delete</button></td>
+    <td><button type="button" class="btn btn-info" (click)="onViewBook(i)">View</button></td>
   </tr>
   </tbody>
 </table>

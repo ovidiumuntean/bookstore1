@@ -11,7 +11,7 @@ const LineItem = sequilizeDb.define('lineItem', {
         }
 
     },
-    qty_in_stock: {
+    quantity: {
         type: Sequelize.INTEGER,
         allowNull: false,
         validate: {
